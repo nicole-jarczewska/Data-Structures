@@ -7,4 +7,4 @@ template <typename T, typename Arg>
 void measure_time_arg(T* table, void (T::*operation)(Arg), Arg arg, const std::filesystem::path& output_csv);
 
 template <typename T, typename Arg>
-void measure_time_bool(T* table, bool (T::*operation)(Arg), Arg arg, const std::filesystem::path& output_csv);
+void measure_time_int(T* table, int (T::*operation)(Arg), Arg arg, const std::filesystem::path& output_csv);

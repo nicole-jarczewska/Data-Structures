@@ -25,24 +25,24 @@ using Timings = std::vector<TimingData>;
 
 class TimingsCollector {
   public:
-    void add_timing(double milliseconds) { timings.push_back({milliseconds}); }
-    
-    bool save_file(const std::filesystem::path& filepath) const {
-        std::ofstream file(filepath);
-        if (!file.is_open()) {
-            std::cerr << "Failed to open file: " << filepath << std::endl;
-            return false;
-        }
-        for (const auto& entry : timings)
-            file << entry.ms << "\n";
-        return true;
-    }
-
-    Timings get_timings() const { return timings; }
-
+      void add_timing(double milliseconds) { timings.push_back({milliseconds}); }
+      
+      bool save_file(const std::filesystem::path& filepath) const {
+          std::ofstream file(filepath);
+          if (!file.is_open()) {
+              std::cerr << "Failed to open file: " << filepath << std::endl;
+              return false;
+          }
+          for (const auto& entry : timings)
+              file << entry.ms << "\n";
+          return true;
+      }
+  
+      Timings get_timings() const { return timings; }
+  
   private:
-    Timings timings;
-};
+      Timings timings;
+  };
 
 template <typename T>
 void measure_time_no_arg(T* table, void (T::*operation)(), const std::filesystem::path& output_csv)
@@ -85,7 +85,7 @@ void measure_time_arg(T* table, void (T::*operation)(Arg), Arg arg, const std::f
 }
 
 template <typename T, typename Arg>
-void measure_time_bool(T* table, bool (T::*operation)(Arg), Arg arg, const std::filesystem::path& output_csv) {
+void measure_time_int(T* table, int (T::*operation)(Arg), Arg arg, const std::filesystem::path& output_csv) {
     Timer timer;
     TimingsCollector timingsCollector;
     const int repeats = 100;

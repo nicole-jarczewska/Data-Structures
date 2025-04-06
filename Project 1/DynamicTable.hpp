@@ -1,5 +1,4 @@
-#ifndef TABLE_H 
-#define TABLE_H
+#pragma once
 
 class DynamicTable {
 public:
@@ -20,5 +19,3 @@ private:
 
     void expand(); // doubling capacity when the table is full
 };
-
-#endif
