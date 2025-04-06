@@ -1,5 +1,7 @@
 #pragma once
 
+void load(const int size, DynamicTable& table);
+
 template <typename T>
 void measure_time_no_arg(T* table, void (T::*operation)(), const std::filesystem::path& output_csv);
 

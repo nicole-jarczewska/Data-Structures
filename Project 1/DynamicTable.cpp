@@ -6,7 +6,7 @@
 //DynamicTable::DynamicTable() : array(nullptr), capacity(4), size(0) {} // creating an empty table
 
 DynamicTable::DynamicTable() {
-    capacity = 10;
+    capacity = 4;
     size = 0;
     array = new int[capacity];
 }
@@ -19,7 +19,7 @@ void DynamicTable::addBack(int element) {
     if (size == capacity) { 
         expand();
     }
-    array[size + 1] = element;
+    array[size] = element;
     size++;
 }
 

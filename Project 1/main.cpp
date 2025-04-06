@@ -1,4 +1,6 @@
 #include <iostream>
+#include <stdlib.h>
+#include <cstdlib>
 #include <chrono>
 #include <vector>
 #include <numeric>
@@ -19,46 +21,31 @@
 #include "TimeTest.hpp"
 #include "TimeTest.cpp"
 
-void testDynamicTable() {
-    
+void testDynamicTable(int size) {
+
+    std::ostringstream filename;
+    filename << size << ".csv";
+
+    measure_time_no_arg(size, &DynamicTable::removeBack, "results/removeBack_" + filename.str());
+    measure_time_no_arg(size, &DynamicTable::removeFront, "results/removeFront_" + filename.str());
+    measure_time_arg(size, &DynamicTable::addBack, 1, "results/addBack_" + filename.str());
+    measure_time_arg(size, &DynamicTable::addFront, 1, "results/addFront_" + filename.str());
+    //measure_time_int(size, &DynamicTable::contains, 1, "results/contains_" + filename.str());
 }
-
-void load(const int size, DynamicTable& table) {
-    std::ifstream inputFile("Dataset.txt");
-    if (!inputFile) {
-        std::cerr << "Failed to open numbers.txt\n";
-        return;
-    }
-
-    int number;
-    int count = 0;
-
-    while (inputFile >> number && count < size){
-        table.addBack(number);
-        ++count;
-    }
-
-    inputFile.close();
-}
-
 
 int main() {
-    DynamicTable table;
-    const int TableSize = 100000;
+    const int TableSizes[] = {1000, 10000, 50000, 100000, 500000, 1000000};
 
-    load(TableSize, table);
-    
+    for(int size : TableSizes){
+        testDynamicTable(size);
+    }
 
-    //measure_time_no_arg(&table, &DynamicTable::removeBack, "results/removeBack.csv");
-    //measure_time_no_arg(&table, &DynamicTable::removeFront, "results/removeFront.csv");
-    //measure_time_arg(&table, &DynamicTable::addBack, 1, "results/addBack.csv");
-    //measure_time_arg(&table, &DynamicTable::addFront, 1, "results/addFront.csv");
-    //measure_time_int(&table, &DynamicTable::contains, 1, "contains.csv");
 
     int A[] = { 1,2,3};
 	int size = sizeof(A) / sizeof(A[0]);
 
-
+{
+    /*
 	std::cout << "Wejsciowa lista: ";
 	create(A,size);
 	display(first);
@@ -92,8 +79,9 @@ int main() {
 	std::cout << "Usuniecie z indexu: ";
 	delete_index(first, 2);
 	display(first);
+    */
+}
 
-
-    //table.print();  
+    //
     return 0;
 }
