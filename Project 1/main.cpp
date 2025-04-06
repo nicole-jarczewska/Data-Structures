@@ -22,19 +22,20 @@
 #include "TimeTest.cpp"
 
 void testDynamicTable(int size) {
-
     std::ostringstream filename;
     filename << size << ".csv";
 
+    int randomNum = rand() % 100001;
+
     measure_time_no_arg(size, &DynamicTable::removeBack, "results/removeBack_" + filename.str());
     measure_time_no_arg(size, &DynamicTable::removeFront, "results/removeFront_" + filename.str());
-    measure_time_arg(size, &DynamicTable::addBack, 1, "results/addBack_" + filename.str());
-    measure_time_arg(size, &DynamicTable::addFront, 1, "results/addFront_" + filename.str());
-    //measure_time_int(size, &DynamicTable::contains, 1, "results/contains_" + filename.str());
+    measure_time_arg(size, &DynamicTable::addBack, randomNum, "results/addBack_" + filename.str());
+    measure_time_arg(size, &DynamicTable::addFront, randomNum, "results/addFront_" + filename.str());
+    measure_time_int(size, &DynamicTable::contains, randomNum, "results/contains_" + filename.str());
 }
 
 int main() {
-    const int TableSizes[] = {1000, 10000, 50000, 100000, 500000, 1000000};
+    const int TableSizes[] = {10000, 50000, 100000, 500000, 1000000, 2000000, 5000000};
 
     for(int size : TableSizes){
         testDynamicTable(size);

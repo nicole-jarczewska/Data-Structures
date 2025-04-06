@@ -33,18 +33,21 @@ class Timer
   public:
     void start() { start_time = std::chrono::high_resolution_clock::now(); }
     void stop() { end_time = std::chrono::high_resolution_clock::now(); }
-    double milliseconds() const { return std::chrono::duration<double, std::milli>(end_time - start_time).count(); }
+    long long nanoseconds() const { 
+        return std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count(); 
+    }
+  
   private:
     std::chrono::high_resolution_clock::time_point start_time, end_time;
 };
 
-struct TimingData { double ms; };
+struct TimingData { double ns; };
 
 using Timings = std::vector<TimingData>;
 
 class TimingsCollector {
   public:
-      void add_timing(double milliseconds) { timings.push_back({milliseconds}); }
+      void add_timing(double nanoseconds) { timings.push_back({nanoseconds}); }
       
       bool save_file(const std::filesystem::path& filepath) const {
           std::ofstream file(filepath);
@@ -53,7 +56,7 @@ class TimingsCollector {
               return false;
           }
           for (const auto& entry : timings)
-              file << entry.ms << "\n";
+              file << entry.ns << "\n";
           return true;
       }
   
@@ -76,7 +79,7 @@ void measure_time_no_arg(const int TableSize, void (T::*operation)(), const std:
         timer.start();
         (table.*operation)();
         timer.stop();
-        timingsCollector.add_timing(timer.milliseconds());
+        timingsCollector.add_timing(timer.nanoseconds());
     }
     const auto& timings = timingsCollector.get_timings();
     if (timings.empty()) {
@@ -100,7 +103,7 @@ void measure_time_arg(const int TableSize, void (T::*operation)(Arg), Arg arg, c
         timer.start();
         (table.*operation)(arg);
         timer.stop();
-        timingsCollector.add_timing(timer.milliseconds());
+        timingsCollector.add_timing(timer.nanoseconds());
     }
 
     if (!timingsCollector.save_file(output_csv)) {
@@ -109,7 +112,7 @@ void measure_time_arg(const int TableSize, void (T::*operation)(Arg), Arg arg, c
 }
 
 template <typename T, typename Arg>
-void measure_time_int(const int TableSize, int (T::*operation)(Arg), Arg arg, const std::filesystem::path& output_csv) {
+void measure_time_int(const int TableSize, int (T::*operation)(Arg) const, Arg arg, const std::filesystem::path& output_csv) {
     Timer timer;
     TimingsCollector timingsCollector;
     const int repeats = 100;
@@ -120,7 +123,7 @@ void measure_time_int(const int TableSize, int (T::*operation)(Arg), Arg arg, co
         timer.start();
         (table.*operation)(arg);
         timer.stop();
-        timingsCollector.add_timing(timer.milliseconds());
+        timingsCollector.add_timing(timer.nanoseconds());
     }
 
     if (!timingsCollector.save_file(output_csv)) {
