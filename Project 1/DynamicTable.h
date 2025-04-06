@@ -1,4 +1,4 @@
-#ifndef TABLE_H //zapobiega problemom związanym z wielokrotnym dołączaniem tego samego pliku nagłówkowego
+#ifndef TABLE_H 
 #define TABLE_H
 
 class DynamicTable {
