@@ -5,11 +5,13 @@ class DynamicTable {
 public:
     DynamicTable();
     ~DynamicTable();
-    void addFront(int e); //e - element
-    void addBack(int e); 
+    
+    void addFront(int element);
+    void addBack(int element); 
     void removeFront(); 
     void removeBack(); 
-    bool contains(int e) const;
+    bool contains(int element) const;
+    void print() const;
 
 private:
     int* array; // pointer to the table
