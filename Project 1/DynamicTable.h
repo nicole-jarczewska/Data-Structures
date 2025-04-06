@@ -1,10 +1,10 @@
 #ifndef TABLE_H //zapobiega problemom związanym z wielokrotnym dołączaniem tego samego pliku nagłówkowego
 #define TABLE_H
 
-class Table {
+class DynamicTable {
 public:
-    Table();
-    ~Table();
+    DynamicTable();
+    ~DynamicTable();
     void addFront(int e); //e - element
     void addBack(int e); 
     void removeFront(); 
@@ -16,7 +16,7 @@ private:
     int capacity; // maximum capacity
     int size; // number of element the table currently contains
 
-    void expand(); // double capacity
+    void expand(); // doubling capacity when the table is full
 };
 
 #endif

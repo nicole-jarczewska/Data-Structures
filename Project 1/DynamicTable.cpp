@@ -1,25 +1,25 @@
 #include <iostream>
 #include <algorithm>
-#include "table.h"
+#include "DynamicTable.h"
 
 
-Table::Table() : array(nullptr), capacity(4), size(0) {} // creating an empty table
+DynamicTable::DynamicTable() : array(nullptr), capacity(4), size(0) {} // creating an empty table
 
-Table::~Table() {
+DynamicTable::~DynamicTable() {
     delete[] array;
 }
 
-void Table::addBack(int e) {
+void DynamicTable::addBack(int e) {
     if (size == capacity) { 
-        expand(); // doubling capacity when the table is full
+        expand();
     }
     array[size + 1] = e;
     size++;
 }
 
-void Table::addFront(int e) {
+void DynamicTable::addFront(int e) {
     if (size == capacity) {
-        expand(); // doubling capacity when the table is full
+        expand();
     }
     for (int i = size; i > 0; --i) {
         array[i] = array[i - 1];
@@ -29,14 +29,14 @@ void Table::addFront(int e) {
 }
 
 
-void Table::removeBack(){
+void DynamicTable::removeBack(){
     if (size > 0){
         array[size] = NULL;
         size--;
     }
 }
 
-void Table::removeFront(){
+void DynamicTable::removeFront(){
     if (size > 0){
         for (int i = 0; i < size - 1; i++){
             array [i] = array [i+1];
@@ -45,7 +45,7 @@ void Table::removeFront(){
     }
 }
 
-bool Table::contains(int e) const {
+bool DynamicTable::contains(int e) const {
     for (int i = 0; i < size; i++) {
         if (array[i] == e) {
             return true;
@@ -54,7 +54,7 @@ bool Table::contains(int e) const {
     return false;
 }
 
-void Table::expand() {
+void DynamicTable::expand() { 
     capacity *= 2;
 
     int* newArray = new int[capacity];
