@@ -5,9 +5,9 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <experimental/filesystem>
+#include <thread>
 
-#include "DynamicTable.hpp"
+#include "TimeTest.hpp"
 
 class Timer
 {
@@ -19,13 +19,13 @@ class Timer
     std::chrono::high_resolution_clock::time_point start_time, end_time;
 };
 
-struct TimingData { long N; double ms; };
+struct TimingData { double ms; };
 
 using Timings = std::vector<TimingData>;
 
 class TimingsCollector {
   public:
-    void add_timing(long N, double milliseconds) { timings.push_back({N, milliseconds}); }
+    void add_timing(double milliseconds) { timings.push_back({milliseconds}); }
     
     bool save_file(const std::filesystem::path& filepath) const {
         std::ofstream file(filepath);
@@ -44,20 +44,61 @@ class TimingsCollector {
     Timings timings;
 };
 
-void measure_operation_timings(void (*operation)(DynamicTable&), const DynamicTable& original_tab, const std::filesystem::path& output_csv)
+template <typename T>
+void measure_time_no_arg(T* table, void (T::*operation)(), const std::filesystem::path& output_csv)
 {
     Timer timer;
     TimingsCollector timingsCollector;
     const int repeats = 100;
 
     for (int i = 0; i < repeats; ++i) {
-        DynamicTable temp_tab = original_tab; // Copy for a clean start each time
+        T temp_table = *table;
         timer.start();
-        operation(temp_tab); // running certain function
+        (temp_table.*operation)();
         timer.stop();
-        timingsCollector.add_timing(temp_tab.getSize(), timer.milliseconds());
+        timingsCollector.add_timing(timer.milliseconds());
+    }
+    if (timingsCollector.get_timings().empty()) {
+      std::cerr << "No timings collected. File will not be saved." << std::endl;
+  } 
+    if (!timingsCollector.save_file(output_csv))
+        std::cerr << "Failed to save." << std::endl;
+}
+
+template <typename T, typename Arg>
+void measure_time_arg(T* table, void (T::*operation)(Arg), Arg arg, const std::filesystem::path& output_csv) {
+    Timer timer;
+    TimingsCollector timingsCollector;
+    const int repeats = 100;
+
+    for (int i = 0; i < repeats; ++i) {
+        T temp_table = *table;
+        timer.start();
+        (temp_table.*operation)(arg);
+        timer.stop();
+        timingsCollector.add_timing(timer.milliseconds());
     }
 
-    if (!timingsCollector.save_file(output_csv))
+    if (!timingsCollector.save_file(output_csv)) {
         std::cerr << "Error saving timings to " << output_csv << std::endl;
+    }
+}
+
+template <typename T, typename Arg>
+void measure_time_bool(T* table, bool (T::*operation)(Arg), Arg arg, const std::filesystem::path& output_csv) {
+    Timer timer;
+    TimingsCollector timingsCollector;
+    const int repeats = 100;
+
+    for (int i = 0; i < repeats; ++i) {
+        T temp_table = *table;
+        timer.start();
+        (temp_table.*operation)(arg);
+        timer.stop();
+        timingsCollector.add_timing(timer.milliseconds());
+    }
+
+    if (!timingsCollector.save_file(output_csv)) {
+        std::cerr << "Error saving timings to " << output_csv << std::endl;
+    }
 }

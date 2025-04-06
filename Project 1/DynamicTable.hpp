@@ -10,7 +10,7 @@ public:
     void addBack(int element); 
     void removeFront(); 
     void removeBack(); 
-    bool contains(int element) const;
+    int contains(int element) const;
     void print() const;
 
 private:

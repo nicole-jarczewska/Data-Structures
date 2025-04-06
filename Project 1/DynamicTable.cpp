@@ -50,13 +50,13 @@ void DynamicTable::removeFront(){
     }
 }
 
-bool DynamicTable::contains(int element) const {
+int DynamicTable::contains(int element) const {
     for (int i = 0; i < size; i++) {
         if (array[i] == element) {
-            return true;
+            return i;
         }
     }
-    return false;
+    return -1; // not found
 }
 
 void DynamicTable::expand() { 
