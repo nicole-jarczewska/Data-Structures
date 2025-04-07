@@ -12,26 +12,34 @@
 #include <vector>
 #include <algorithm>
 #include <thread>
+#include <functional>
 
 
 #include "DynamicTable.hpp"
 #include "DynamicTable.cpp"
 #include "LinkedList.hpp"
 #include "LinkedList.cpp"
+
 #include "TimeTestDT.hpp"
 #include "TimeTestDT.cpp"
+#include "TimeTestLL.hpp"
+#include "TimeTestLL.cpp"
 
 void testDynamicTable(int size) {
     std::ostringstream filename;
     filename << size << ".csv";
 
-    int randomNum = rand() % 100001;
+    int randomNum = rand() % size;
 
-    measure_time_no_arg(size, &DynamicTable::removeBack, "results/removeBack_" + filename.str());
-    measure_time_no_arg(size, &DynamicTable::removeFront, "results/removeFront_" + filename.str());
-    measure_time_arg(size, &DynamicTable::addBack, randomNum, "results/addBack_" + filename.str());
-    measure_time_arg(size, &DynamicTable::addFront, randomNum, "results/addFront_" + filename.str());
-    measure_time_int(size, &DynamicTable::contains, randomNum, "results/contains_" + filename.str());
+    measure_time_arg(size, &DynamicTable::addBack, randomNum, "results/DT_addBack_" + filename.str());
+    measure_time_arg(size, &DynamicTable::addFront, randomNum, "results/DT_addFront_" + filename.str());
+	measure_time_no_arg(size, &DynamicTable::removeFront, "results/DT_removeFront_" + filename.str());
+	measure_time_no_arg(size, &DynamicTable::removeBack, "results/DT_removeBack_" + filename.str());
+    measure_time_int(size, &DynamicTable::contains, randomNum, "results/DT_contains_" + filename.str());
+}
+
+void testLinkedList(int size) {
+    measure_time(size);
 }
 
 int main() {
@@ -39,50 +47,9 @@ int main() {
 
     for(int size : TableSizes){
         testDynamicTable(size);
+		testLinkedList(size);
     }
 
 
-    int A[] = { 1,2,3};
-	int size = sizeof(A) / sizeof(A[0]);
-
-{
-    /*
-	std::cout << "Wejsciowa lista: ";
-	create(A,size);
-	display(first);
-	std::cout << std::endl;
-
-	std::cout << "Dodanie elementu na koniec: ";
-	add_back(300);
-	display(first);
-	std::cout << std::endl;
-
-	std::cout << "Dodanie elementu na wybrany index: ";
-	append_index(first, 2, 10);
-	display(first);
-	std::cout << std::endl;
-
-	std::cout << "Dodanie elementu na poczatek: ";
-	add_front(23);
-	display(first);
-	std::cout << std::endl;
-
-	std::cout << "Usuniecie pierwszego elementu: ";
-	delete_first();
-	display(first);
-	std::cout << std::endl;
-
-	std::cout << "Usuniecie ostatniego elementu: ";
-	delete_last();
-	display(first);
-	std::cout << std::endl;
-
-	std::cout << "Usuniecie z indexu: ";
-	delete_index(first, 2);
-	display(first);
-    */
-}
-
-    //
     return 0;
 }

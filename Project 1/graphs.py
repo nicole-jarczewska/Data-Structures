@@ -2,63 +2,100 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-addFront = []
-addBack = []
-removeFront = []
-removeBack = []
-contains = []
 
-OPERATIONS = ["addFront", "addBack", "removeFront", "removeBack", "contains"]
+DT_results = {
+    "addFront": [],
+    "addBack": [],
+    "removeFront": [],
+    "removeBack": [],
+    "contains": []
+}
+
+DT_OPERATIONS = list(DT_results.keys())
 SIZES = [10000, 50000, 100000, 500000, 1000000, 2000000, 5000000]
 
-
-for operation in OPERATIONS:
+for operation in DT_OPERATIONS:
     for size in SIZES:
         total_time = 0
-        filename = f"results/{operation}_{size}.csv"
-        
+        filename = f"results/DT_{operation}_{size}.csv"
+
         with open(filename) as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=';', quotechar='|')
-            
-            for row in spamreader:
-                total_time += float(row[0])
+            reader = csv.reader(csvfile)
+
+            for row in reader:
+                if row: 
+                    total_time += float(row[0])
+
+        mean_time = total_time / 100 
+        DT_results[operation].append(mean_time)
+
+LL_results = {
+    "add_front": [],
+    "add_back": [],
+    "delete_first": [],
+    "delete_last": [],
+    "find_value": []
+}
+
+LL_OPERATIONS = list(LL_results.keys())
+
+for operation in LL_OPERATIONS:
+    for size in SIZES:
+        total_time = 0
+        filename = f"results/LL_{operation}_{size}.csv"
+
+        try:
+            with open(filename) as csvfile:
+                reader = csv.reader(csvfile)
+                next(reader)  # Skip header
+
+                for row in reader:
+                    if row:
+                        total_time += float(row[0])
+        except FileNotFoundError:
+            print(f"File not found: {filename}")
+            LL_results[operation].append(None)  # Append None for missing data
+            continue
+
+        mean_time = total_time / 100  # Assuming 100 measurements
+        LL_results[operation].append(mean_time)
+
+print(LL_results)
+print(DT_results)
+
+def plot_comparison_for_operation(DT_results, LL_results, operation, SIZES):
+    plt.figure(figsize=(10, 6))
+    
+    # Get times for the specific operation from both DT and LL results
+    dt_times = DT_results.get(operation, [])
+    ll_times = LL_results.get(operation, [])
+    
+    # Check if both DT and LL results contain data
+    if not dt_times or not ll_times:
+        print(f"Data missing for operation: {operation}")
+        return  # Skip plotting if no data available
+    
+    # Plot for Dynamic Table (DT) if data is available
+    plt.plot(SIZES, dt_times, label=f'DT_{operation}', marker='o')
+    
+    # Plot for Linked List (LL) if data is available
+    plt.plot(SIZES, ll_times, label=f'LL_{operation}', marker='o')
+    
+    # Title and labels
+    plt.title(f'Comparison of {operation} (DT vs LL)')
+    plt.xlabel('Size')
+    plt.ylabel('Average Time (ns)')
+    
+    # Add legend and grid
+    plt.legend()
+    plt.grid(True)
+    
+    # Show plot
+    plt.show()
 
 
-        mean_time = total_time / 100  
-        if operation == "addFront":
-            addFront.append(mean_time)
-        elif operation == "addBack":
-            addBack.append(mean_time)
-        elif operation == "removeFront":
-            removeFront.append(mean_time)
-        elif operation == "removeBack":
-            removeBack.append(mean_time)
-        elif operation == "contains":
-            contains.append(mean_time)
+OPERATIONS = ["addFront", "addBack", "removeFront", "removeBack", "contains"]
 
-
-
-plt.figure(figsize=(10, 6))
-
-plt.plot(SIZES, addFront, label="addFront", marker='o',linestyle='-')
-plt.plot(SIZES, addBack, label="addBack", marker='o',linestyle='-')
-plt.plot(SIZES, removeFront, label="removeFront", marker='o',linestyle='--')
-plt.plot(SIZES, removeBack, label="removeBack", marker='o', linestyle='--')
-plt.plot(SIZES, contains, label="contains", marker='o', linestyle='--')
-
-# Add titles and labels
-plt.title('Mean Execution Time for Different Operations')
-plt.xlabel('Size')
-plt.ylabel('Mean Time (ms)')  # Adjust the unit if needed
-plt.xscale('log')  # Optional: Use log scale for better visualization
-#plt.yscale('log')  # Optional: Use log scale for better visualization
-#plt.xticks([10000, 50000, 100000, 500000, 1000000, 2000000, 5000000], ['10k', '50k', '100k', '500k', '1M', '2M', '5M'])
-#plt.yticks([1, 10, 100, 1000, 10000], ['1', '10', '100', '1k', '10k'])
-
-# Add grid and legend
-plt.grid(True, which='both', linestyle='--', linewidth=0.5)
-plt.legend()
-
-# Show the plot
-plt.tight_layout()
-plt.show()
+# Plot comparisons for each operation
+for operation in OPERATIONS:
+    plot_comparison_for_operation(DT_results, LL_results, operation, SIZES)

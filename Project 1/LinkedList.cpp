@@ -74,7 +74,17 @@ void add_front(int value) {
 	first = t;
 }
 
-
+int find_value(struct Node* p, int value) {
+	int index = 0;
+	while (p != nullptr) {
+		if (p->data == value) {
+			return index;
+		}
+		p = p->next;
+		index++;
+	}
+	return -1; // Not found
+}
 
 void delete_first() {
 	if (first == nullptr) {
