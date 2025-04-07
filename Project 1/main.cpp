@@ -18,8 +18,8 @@
 #include "DynamicTable.cpp"
 #include "LinkedList.hpp"
 #include "LinkedList.cpp"
-#include "TimeTest.hpp"
-#include "TimeTest.cpp"
+#include "TimeTestDT.hpp"
+#include "TimeTestDT.cpp"
 
 void testDynamicTable(int size) {
     std::ostringstream filename;

@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <thread>
 
-#include "TimeTest.hpp"
+#include "TimeTestDT.hpp"
 #include "DynamicTable.hpp"
 
 void load(const int size, DynamicTable& table) {
