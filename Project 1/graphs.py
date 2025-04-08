@@ -97,6 +97,7 @@ def plot_comparison_for_operation(DT_results, LL_results, operation, SIZES):
     plt.xlabel('Rozmiar zbioru')
     plt.ylabel('Średni czas wykonania [ns]')
     plt.xscale("log")
+    plt.grid(True, which="both", linestyle="--", linewidth=0.5)
     
     # Add legend and grid
     plt.legend()

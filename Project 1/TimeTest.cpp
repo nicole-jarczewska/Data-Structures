@@ -69,30 +69,6 @@ void DT_load(const int size, DynamicTable& table) {
 }
 
 
-template <typename T>
-void measure_time_no_arg(const int TableSize, void (T::*operation)(), const std::filesystem::path& output_csv)
-{
-    Timer timer;
-    TimingsCollector timingsCollector;
-    const int repeats = 100;
-
-    for (int i = 0; i < repeats; ++i) {
-        DynamicTable table;
-        DT_load(TableSize-1, table);
-        timer.start();
-        (table.*operation)();
-        timer.stop();
-        timingsCollector.add_timing(timer.nanoseconds());
-    }
-    const auto& timings = timingsCollector.get_timings();
-    if (timings.empty()) {
-        std::cerr << "No timings collected. File will not be saved." << std::endl;
-    } else {
-        if (!timingsCollector.save_file(output_csv)) {
-            std::cerr << "Failed to save timings to " << output_csv << std::endl;
-        }
-    }  
-}
 
 template <typename T, typename Arg>
 void DT_measure_time(const int TableSize, void (T::*operation)(Arg, Arg), Arg element, Arg index, const std::filesystem::path& output_csv) {
