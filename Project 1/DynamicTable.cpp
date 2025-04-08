@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include "DynamicTable.hpp"
+#include "include/DynamicTable.hpp"
 
 
 //DynamicTable::DynamicTable() : array(nullptr), capacity(4), size(0) {} // creating an empty table
@@ -15,7 +15,8 @@ DynamicTable::~DynamicTable() {
     delete[] array;
 }
 
-void DynamicTable::addBack(int element) {
+void DynamicTable::addBack(int element, int index) {
+    index = 0; 
     if (size == capacity) { 
         expand();
     }
@@ -23,7 +24,8 @@ void DynamicTable::addBack(int element) {
     size++;
 }
 
-void DynamicTable::addFront(int element) {
+void DynamicTable::addFront(int element, int index) {
+    index = 0; 
     if (size == capacity) {
         expand();
     }
@@ -34,20 +36,49 @@ void DynamicTable::addFront(int element) {
     size++;
 }
 
+void DynamicTable::addIndex(int element, int index) {
+    if (index < 0 || index > size) 
+        return;
+    if (size == capacity) 
+        expand();
 
-void DynamicTable::removeBack(){
+    for (int i = size; i > index; --i) {
+        array[i] = array[i - 1];
+    }
+
+    array[index] = element;
+    size++;
+}
+
+
+void DynamicTable::removeBack(int element, int index){
+    index = 0; 
+    element = 0; 
     if (size > 0){
         size--;
     }
 }
 
-void DynamicTable::removeFront(){
+void DynamicTable::removeFront(int element, int index){
+    index = 0; 
+    element = 0; 
     if (size > 0){
         for (int i = 0; i < size - 1; i++){
             array [i] = array [i+1];
         }
         size--;
     }
+}
+
+void DynamicTable::removeIndex(int element, int index) {
+    element = 0; 
+    if (index < 0 || index >= size) 
+        return;
+
+    for (int i = index; i < size - 1; ++i) {
+        array[i] = array[i + 1];
+    }
+    size--;
 }
 
 int DynamicTable::contains(int element) const {

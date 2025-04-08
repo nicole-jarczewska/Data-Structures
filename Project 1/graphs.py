@@ -2,19 +2,32 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 DT_results = {
-    "addFront": [],
-    "addBack": [],
-    "removeFront": [],
-    "removeBack": [],
-    "contains": []
+    "add_front": [],
+    "add_back": [],
+    "append_index": [],
+    "delete_first": [],
+    "delete_last": [],
+    "delete_index": [],
+    "find_value": []
 }
 
-DT_OPERATIONS = list(DT_results.keys())
+LL_results = {
+    "add_front": [],
+    "add_back": [],
+    "append_index": [],
+    "delete_first": [],
+    "delete_last": [],
+    "delete_index": [],
+    "find_value": []
+}
+
+OPERATIONS = list(DT_results.keys())
+
+
 SIZES = [10000, 50000, 100000, 500000, 1000000, 2000000, 5000000]
 
-for operation in DT_OPERATIONS:
+for operation in OPERATIONS:
     for size in SIZES:
         total_time = 0
         filename = f"results/DT_{operation}_{size}.csv"
@@ -29,17 +42,7 @@ for operation in DT_OPERATIONS:
         mean_time = total_time / 100 
         DT_results[operation].append(mean_time)
 
-LL_results = {
-    "add_front": [],
-    "add_back": [],
-    "delete_first": [],
-    "delete_last": [],
-    "find_value": []
-}
-
-LL_OPERATIONS = list(LL_results.keys())
-
-for operation in LL_OPERATIONS:
+for operation in OPERATIONS:
     for size in SIZES:
         total_time = 0
         filename = f"results/LL_{operation}_{size}.csv"
@@ -60,10 +63,16 @@ for operation in LL_OPERATIONS:
         mean_time = total_time / 100  # Assuming 100 measurements
         LL_results[operation].append(mean_time)
 
-print(LL_results)
-print(DT_results)
-
 def plot_comparison_for_operation(DT_results, LL_results, operation, SIZES):
+    TITLES = {
+    "add_front": "dodawania elementu na początku",
+    "add_back": "dodawania elementu na końcu",
+    "append_index": "dodawania elementu na wybranym indeksie",
+    "delete_first": "usunięcia pierwszego elementu",
+    "delete_last": "usunięcia ostatniego elementu",
+    "delete_index": "usunięcia elementu z wybranego indeksu",
+    "find_value": "wyszukania elementu"}
+
     plt.figure(figsize=(10, 6))
     
     # Get times for the specific operation from both DT and LL results
@@ -72,19 +81,22 @@ def plot_comparison_for_operation(DT_results, LL_results, operation, SIZES):
     
     # Check if both DT and LL results contain data
     if not dt_times or not ll_times:
-        print(f"Data missing for operation: {operation}")
+        print(f"Data missing for operation: {operation}.")
         return  # Skip plotting if no data available
     
     # Plot for Dynamic Table (DT) if data is available
-    plt.plot(SIZES, dt_times, label=f'DT_{operation}', marker='o')
+    plt.plot(SIZES, dt_times, label=f'Tablica dynamiczna', marker='o', color='#fc0356')
     
     # Plot for Linked List (LL) if data is available
-    plt.plot(SIZES, ll_times, label=f'LL_{operation}', marker='o')
+    plt.plot(SIZES, ll_times, label=f'Lista wiązana', marker='o', color='#0318fc')
     
+
+    title = TITLES.get(operation, operation)
     # Title and labels
-    plt.title(f'Comparison of {operation} (DT vs LL)')
-    plt.xlabel('Size')
-    plt.ylabel('Average Time (ns)')
+    plt.title(f'Porównanie operacji {title} ')
+    plt.xlabel('Rozmiar zbioru')
+    plt.ylabel('Średni czas wykonania [ns]')
+    plt.xscale("log")
     
     # Add legend and grid
     plt.legend()
@@ -94,8 +106,5 @@ def plot_comparison_for_operation(DT_results, LL_results, operation, SIZES):
     plt.show()
 
 
-OPERATIONS = ["addFront", "addBack", "removeFront", "removeBack", "contains"]
-
-# Plot comparisons for each operation
 for operation in OPERATIONS:
     plot_comparison_for_operation(DT_results, LL_results, operation, SIZES)

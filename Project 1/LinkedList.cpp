@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include "LinkedList.hpp"
+#include "include/LinkedList.hpp"
 
 void create(int A[], int n) {
 	int i;

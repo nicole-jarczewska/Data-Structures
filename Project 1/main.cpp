@@ -15,31 +15,32 @@
 #include <functional>
 
 
-#include "DynamicTable.hpp"
+#include "include/DynamicTable.hpp"
 #include "DynamicTable.cpp"
-#include "LinkedList.hpp"
+#include "include/LinkedList.hpp"
 #include "LinkedList.cpp"
 
-#include "TimeTestDT.hpp"
-#include "TimeTestDT.cpp"
-#include "TimeTestLL.hpp"
-#include "TimeTestLL.cpp"
+#include "include/TimeTest.hpp"
+#include "TimeTest.cpp"
 
 void testDynamicTable(int size) {
     std::ostringstream filename;
     filename << size << ".csv";
 
-    int randomNum = rand() % size;
+    int randomNumber = rand() % 1000001;
+    int randomIndex = rand() % (size-1);
 
-    measure_time_arg(size, &DynamicTable::addBack, randomNum, "results/DT_addBack_" + filename.str());
-    measure_time_arg(size, &DynamicTable::addFront, randomNum, "results/DT_addFront_" + filename.str());
-	measure_time_no_arg(size, &DynamicTable::removeFront, "results/DT_removeFront_" + filename.str());
-	measure_time_no_arg(size, &DynamicTable::removeBack, "results/DT_removeBack_" + filename.str());
-    measure_time_int(size, &DynamicTable::contains, randomNum, "results/DT_contains_" + filename.str());
+    DT_measure_time(size, &DynamicTable::addBack, randomNumber, 0, "results/DT_add_back_" + filename.str());
+    DT_measure_time(size, &DynamicTable::addFront, randomNumber, 0, "results/DT_add_front_" + filename.str());
+    DT_measure_time(size, &DynamicTable::addIndex, randomNumber, randomIndex, "results/DT_append_index_" + filename.str());
+	DT_measure_time(size, &DynamicTable::removeFront, 0, 0, "results/DT_delete_first_" + filename.str());
+	DT_measure_time(size, &DynamicTable::removeBack, 0, 0, "results/DT_delete_last_" + filename.str());
+    DT_measure_time(size, &DynamicTable::removeIndex, 0, randomIndex, "results/DT_delete_index_" + filename.str());
+    DT_measure_time_int(size, &DynamicTable::contains, randomNumber, "results/DT_find_value_" + filename.str());
 }
 
 void testLinkedList(int size) {
-    measure_time(size);
+    LL_measure_time(size);
 }
 
 int main() {
