@@ -75,30 +75,23 @@ void display(){
 }
 
 void peek(int priority) {
-    if (first == nullptr) {
-        std::cout << "Kolejka pusta!\n";
-        return;
-    }
-
     Node* p = first;
-
-
     while (p != nullptr && p->priority != priority) {
         p = p->next;
     }
 
     if (p == nullptr) {
-        // std::cout << "Brak elementu o priorytecie " << priority << ".\n";
-        return;
+        return; // brak
     }
 
-    // if (p->next == nullptr) {
-    //     std::cout << "Brak kolejnego elementu " << priority << ".\n";
-    // } else {
-    //     std::cout << "Następny po <" << p->data << ", " << p->priority << "> to: ";
-    //     std::cout << "<" << p->next->data << ", " << p->next->priority << ">\n";
-    // }
+    if (p->next == nullptr) {
+        return; // brak kolejnego
+    } else {
+        // znaleziono, ale nie wypisujemy — to tylko test czasu
+        return;
+    }
 }
+
 
 void modify_priority(int data, int old_p, int new_p) {
     if (first == nullptr) return;
@@ -133,6 +126,24 @@ void modify_priority(int data, int old_p, int new_p) {
 void random_array(int* tab, int size, int down, int up) {
     for (int i = 0; i < size; i++) {
         tab[i] = rand() % (up - down + 1) + down;
+    }
+}
+
+void create_optimized(int data[], int priorities[], int n) {
+    std::vector<std::pair<int, int>> pairs(n);
+    for (int i = 0; i < n; ++i) {
+        pairs[i] = { priorities[i], data[i] };
+    }
+
+    // Sort by priority descending
+    std::sort(pairs.begin(), pairs.end(), std::greater<>());
+
+    for (int i = 0; i < n; ++i) {
+        Node* t = new Node;
+        t->data = pairs[i].second;
+        t->priority = pairs[i].first;
+        t->next = first;
+        first = t;
     }
 }
 

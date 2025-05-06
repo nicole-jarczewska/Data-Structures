@@ -13,7 +13,7 @@ DT_results = {
 
 LL_results = {
     "add": [],
-    "remove": [],
+    "delete": [],
     "size": [],
     "peek": [],
     "modify": [],
@@ -40,7 +40,7 @@ for operation in OPERATIONS:
 for operation in OPERATIONS:
     for size in SIZES:
         total_time = 0
-        filename = f"results/LL_{operation}_{size}.csv"
+        filename = f"results/LL_{operation}{size}.csv"
 
         try:
             with open(filename) as csvfile:
@@ -55,7 +55,7 @@ for operation in OPERATIONS:
             LL_results[operation].append(None)
             continue
 
-        mean_time = total_time / 100 
+        mean_time = total_time / 100 / 1000000
         LL_results[operation].append(mean_time)
 
 def plot_comparison_for_operation(DT_results, LL_results, operation, SIZES):#

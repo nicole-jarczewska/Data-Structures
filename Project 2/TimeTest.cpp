@@ -90,43 +90,67 @@ void DT_measure_time_int(const int TableSize, int (T::*operation)() const, const
 
 void LL_measure_time(int size) {
     std::vector<int> PriorityQueue(size);
+    std::vector<int> priorities(size);
     random_array(PriorityQueue.data(), size, 1, 1000); 
+    random_array(priorities.data(), size, 1, 100);
 
     int randomNum = std::rand() % 10001;
     int randomPriority = std::rand() % 101;
 
-    std::vector<TestFunction> tests = {
-            { "add", [&]() { insert(randomNum, randomPriority); } },  
-            { "delete", [&]() { delete_p(randomPriority); } },
-            { "size", [&]() { queue_size(); } },
-            { "peek", [&]() { peek(randomPriority); } },  
-            { "modify", [&]() { modify_priority(randomNum, std::rand() % 101, randomPriority); } },
-    };
 
-    for (const auto& test : tests) {
-        std::string filename = "results/LL_" + test.name + std::to_string(size) + ".csv";
-        std::ofstream results(filename);
-        results << "Time[ns]\n";
+        std::vector<std::function<void(const std::vector<int>&, const std::vector<int>&)>> tests = {
+            // INSERT
+            [&](const std::vector<int>& data, const std::vector<int>& prio) {
+                int index = rand() % size;
+                insert(data[index], prio[index]);
+            },
 
-        for (int j = 0; j < 100; j++) {
-            std::vector<int> tab = PriorityQueue; 
-            int priorytety[size];
-            for (int k = 0; k < size; ++k) {
-                priorytety[k] = rand() % 101;  
+            // DELETE
+            [&](const std::vector<int>& data, const std::vector<int>& prio) {
+                int index = rand() % size;
+                delete_p(prio[index]);
+            },
+
+            // QUEUE_SIZE
+            [&](const std::vector<int>&, const std::vector<int>&) {
+                queue_size();
+            },
+
+            // PEEK
+            [&](const std::vector<int>&, const std::vector<int>& prio) {
+                int index = rand() % size;
+                peek(prio[index]);
+            },
+
+            // MODIFY_PRIORITY
+            [&](const std::vector<int>& data, const std::vector<int>& prio) {
+                int index = rand() % size;
+                modify_priority(data[index], prio[index], prio[index] + 1);
             }
-            create(tab.data(), priorytety, size);  
+        };
 
-            auto start = std::chrono::high_resolution_clock::now();
-            test.func();              
-            auto end = std::chrono::high_resolution_clock::now();
+        std::vector<std::string> test_names = { "add", "delete", "size", "peek", "modify" };
 
-            long long time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-            results << std::fixed << std::setprecision(3) << time << "\n";
+        for (int t = 0; t < tests.size(); ++t) {
+            std::string filename = "results/LL_" + test_names[t] + std::to_string(size) + ".csv";
+            std::ofstream results(filename);
+            results << "Time[ns]\n";
 
-            // Zwalnianie pamięci
-            clear_queue();
+            for (int j = 0; j < 100; j++) {
+                // create(const_cast<int*>(PriorityQueue.data()), const_cast<int*>(priorities.data()), size);
+                create_optimized(PriorityQueue.data(), priorities.data(), size);
+
+                auto start = std::chrono::high_resolution_clock::now();
+                tests[t](PriorityQueue, priorities);
+                auto end = std::chrono::high_resolution_clock::now();
+
+                long long time = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+                results << std::fixed << std::setprecision(3) << time << "\n";
+
+                clear_queue();
+            }
+
+            results.close();
+            std::cout << "Wyniki zapisano do: " << filename << std::endl;
         }
-        results.close();
-        std::cout << "Wyniki zapisano do: " << filename << std::endl;
-    }
 }

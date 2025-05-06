@@ -40,7 +40,7 @@ int main() {
     const int TableSizes[] = {10000, 50000, 100000, 500000, 1000000, 2000000, 5000000}; //
 
     for(int size : TableSizes){
-        //testDynamicTable(size);
+        testDynamicTable(size);
 		testLinkedList(size);
     }
 
