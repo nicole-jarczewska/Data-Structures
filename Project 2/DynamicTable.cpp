@@ -42,21 +42,25 @@ void DynamicTable::initialAdd(int value, int priority) {
 }
 
 void DynamicTable::remove(int value, int priority) {
-    int index = -1;
-    for (int i = 0; i < size; i++) {
-        if (array[i].value == value) {
-            index = i;
-            break;
-        }
-    }
+    // int index = -1;
+    // for (int i = 0; i < size; i++) {
+    //     if (array[i].value == value) {
+    //         index = i;
+    //         break;
+    //     }
+    // }
     
-    if (index != -1) {
-        for (int i = index; i < size - 1; i++) {
-            array[i] = array[i + 1];
-        }
-        size--;
-        reorder();
-    }
+    // if (index != -1) {
+    //     for (int i = index; i < size - 1; i++) {
+    //         array[i] = array[i + 1];
+    //     }
+    //     size--;
+    //     reorder();
+    // }
+
+    if (size == 0) return;
+    size--;    
+    return;
 }
 
 int DynamicTable::peek() const {
@@ -64,7 +68,7 @@ int DynamicTable::peek() const {
         std::cout << "Queue is empty.\n";
         return -1;
     }
-    return array[0].value; 
+    return array[size-1].value; 
 }
 
 int DynamicTable::getSize() const {

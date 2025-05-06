@@ -92,4 +92,4 @@ def plot_comparison_for_operation(DT_results, LL_results, operation, SIZES):#
 
 
 for operation in OPERATIONS:
-    plot_comparison_for_operation(DT_results, LL_results, operation, SIZES)
+    plot_comparison_for_operation(DT_results, LL_results, operation, SIZES) #
