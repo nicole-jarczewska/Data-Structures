@@ -47,10 +47,11 @@ void insert(int x, int priority) {
 //     // Jeśli nie znaleziono — nic nie robimy
 // }
 
-void delete_p(int priority) {
-    Node* p = first;
+void delete_p() {
     if(first == nullptr) return;
-    first=first->next;
+    Node* temp = first;
+    first = first->next;
+    delete temp;
 }
 
 
@@ -80,8 +81,7 @@ void display(){
     
 }
 
-int peek(int priority) {
-    Node* p = first;
+int peek() {
     if(first == nullptr) {
         std::cout << "Queue is empty.\n";
         return -1;

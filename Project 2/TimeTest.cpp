@@ -40,26 +40,17 @@ class TimingsCollector {
         Timings timings;
     };
 
-
-void DT_load(const int size, DynamicTable& table) {
-  for (int i = 0; i < size-1; i++) {
-      table.initialAdd(rand() % 100001, rand() % 101);
-  }
-    table.reorder();
-    table.add(rand() % 100001, rand() % 101);
-}
-
 template <typename T, typename Arg>
-void DT_measure_time(const int TableSize, void (T::*operation)(Arg, Arg), Arg element, Arg index, const std::filesystem::path& output_csv) {
+void measure_time(const int size, void (T::*operation)(Arg, Arg), Arg element, Arg index, const std::filesystem::path& output_csv) {
     Timer timer;
     TimingsCollector timingsCollector;
     const int repeats = 100;
 
     for (int i = 0; i < repeats; ++i) {
-        DynamicTable table;
-        DT_load(TableSize, table);
+        T priority_queue;
+        priority_queue.load(size);
         timer.start();
-        (table.*operation)(element, index);
+        (priority_queue.*operation)(element, index);
         timer.stop();
         timingsCollector.add_timing(timer.nanoseconds());
     }
@@ -70,16 +61,16 @@ void DT_measure_time(const int TableSize, void (T::*operation)(Arg, Arg), Arg el
 }
 
 template <typename T>
-void DT_measure_time_int(const int TableSize, int (T::*operation)() const, const std::filesystem::path& output_csv) {
+void measure_time_int(const int size, int (T::*operation)() const, const std::filesystem::path& output_csv) {
     Timer timer;
     TimingsCollector timingsCollector;
     const int repeats = 100;
 
     for (int i = 0; i < repeats; ++i) {
-        DynamicTable table;
-        DT_load(TableSize, table);
+        T priority_queue;
+        priority_queue.load(size);
         timer.start();
-        (table.*operation)();
+        (priority_queue.*operation)();
         timer.stop();
         timingsCollector.add_timing(timer.nanoseconds());
     }
@@ -109,7 +100,7 @@ void LL_measure_time(int size) {
             // DELETE
             [&](const std::vector<int>& data, const std::vector<int>& prio) {
                 int index = rand() % size;
-                delete_p(prio[index]);
+                delete_p();
             },
 
             // QUEUE_SIZE
@@ -120,7 +111,7 @@ void LL_measure_time(int size) {
             // PEEK
             [&](const std::vector<int>&, const std::vector<int>& prio) {
                 int index = rand() % size;
-                peek(prio[index]);
+                peek();
             },
 
             // MODIFY_PRIORITY

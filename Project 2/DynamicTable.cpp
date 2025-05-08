@@ -3,7 +3,7 @@
 Element::Element(int value, int priority) : value(value), priority(priority) {}
 
 DynamicTable::DynamicTable() {
-    capacity = 4;
+    capacity = 10;
     size = 0;
     array = new Element[capacity];
 }
@@ -47,11 +47,15 @@ void DynamicTable::add(int value, int priority) {
     size++;
 }
 
-void DynamicTable::initialAdd(int value, int priority) {
-    if (size == capacity) {
+void DynamicTable::load(int desired_size) {
+    if (size == capacity) 
         expand();
-    }
-    array[size++] = Element(value, priority);
+
+    for (int i = 0; i < desired_size; ++i)
+    array[size++] = Element(rand() % 100001, rand() % 101);
+
+    reorder();
+    return;
 }
 
 void DynamicTable::remove(int value, int priority) {
@@ -90,6 +94,7 @@ void DynamicTable::modifyPriority(int value, int newPriority) {
     }
     size--;
     add(temp.value, temp.priority);
+    return;
     // int new_index = 0;
     // while(array[new_index].priority < newPriority && new_index < size) {
     //     new_index++;
@@ -109,4 +114,5 @@ void DynamicTable::print() const {
         if (i < size - 1) std::cout << ", ";
     }
     std::cout << "]\n";
+    return;
 }
