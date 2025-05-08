@@ -18,6 +18,7 @@ public:
     int peek() const; 
     int getSize() const;   
     void modifyPriority(int value, int newPriority);
+    void reorder();
     void print() const;
 
 private:
@@ -25,5 +26,4 @@ private:
     int capacity;
     int size;
     void expand();
-    void reorder();
 };

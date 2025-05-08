@@ -37,12 +37,41 @@ void testLinkedList(int size) {
 }
 
 int main() {
-    const int TableSizes[] = {10000, 50000, 100000, 500000, 1000000, 2000000, 5000000}; //
+    srand(static_cast<unsigned int>(time(0)));
+    const int TableSizes[] = {1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000}; //
 
     for(int size : TableSizes){
-        testDynamicTable(size);
-		testLinkedList(size);
+        // testDynamicTable(size);
+		// testLinkedList(size);
     }
+
+    // int data[]      = { 10, 20, 30, 40, 50 };
+    // int priority[]  = {  2,  5,  1,  4,  3 };
+    // int n = sizeof(data) / sizeof(data[0]);
+
+    // create(data, priority, n);
+    // display();
+
+    // insert(25, 6);      // higher priority than any existing node
+    // display();
+
+    // delete_p(4);        // expects the _correct_ delete_p implementation
+    // display();
+
+    // modify_priority(30, 1, 7);
+    // display();
+
+    // clear_queue();
+
+    DynamicTable table;
+    table.add(10, 2);   
+    table.add(9, 2); 
+    table.add(3, 98); 
+    table.add(5, 4); 
+    table.add(2, 2);
+    table.print();
+    table.modifyPriority(3, 1); 
+    table.print();
 
 
     return 0;

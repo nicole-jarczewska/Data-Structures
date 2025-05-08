@@ -19,32 +19,38 @@ void insert(int x, int priority) {
     }
 }
 
+// void delete_p(int priority) {
+//     if (first == nullptr) return;
+
+//     Node* p = first;
+//     Node* q = nullptr;
+
+//     // Jeśli pierwszy element ma podany priorytet
+//     if (first->priority == priority) {
+//         q = first;
+//         first = first->next;
+//         delete q;
+//         return;
+//     }
+
+//     // Szukamy dalej w kolejce
+//     while (p->next != nullptr && p->next->priority != priority) {
+//         p = p->next;
+//     }
+
+//     // Jeśli znaleziono
+//     if (p->next != nullptr) {
+//         q = p->next;
+//         p->next = q->next;
+//         delete q;
+//     }
+//     // Jeśli nie znaleziono — nic nie robimy
+// }
+
 void delete_p(int priority) {
-    if (first == nullptr) return;
-
     Node* p = first;
-    Node* q = nullptr;
-
-    // Jeśli pierwszy element ma podany priorytet
-    if (first->priority == priority) {
-        q = first;
-        first = first->next;
-        delete q;
-        return;
-    }
-
-    // Szukamy dalej w kolejce
-    while (p->next != nullptr && p->next->priority != priority) {
-        p = p->next;
-    }
-
-    // Jeśli znaleziono
-    if (p->next != nullptr) {
-        q = p->next;
-        p->next = q->next;
-        delete q;
-    }
-    // Jeśli nie znaleziono — nic nie robimy
+    if(first == nullptr) return;
+    first=first->next;
 }
 
 
@@ -74,22 +80,13 @@ void display(){
     
 }
 
-void peek(int priority) {
+int peek(int priority) {
     Node* p = first;
-    while (p != nullptr && p->priority != priority) {
-        p = p->next;
+    if(first == nullptr) {
+        std::cout << "Queue is empty.\n";
+        return -1;
     }
-
-    if (p == nullptr) {
-        return; // brak
-    }
-
-    if (p->next == nullptr) {
-        return; // brak kolejnego
-    } else {
-        // znaleziono, ale nie wypisujemy — to tylko test czasu
-        return;
-    }
+    return first->data;
 }
 
 

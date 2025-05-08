@@ -45,6 +45,7 @@ void DT_load(const int size, DynamicTable& table) {
   for (int i = 0; i < size-1; i++) {
       table.initialAdd(rand() % 100001, rand() % 101);
   }
+    table.reorder();
     table.add(rand() % 100001, rand() % 101);
 }
 
@@ -56,7 +57,7 @@ void DT_measure_time(const int TableSize, void (T::*operation)(Arg, Arg), Arg el
 
     for (int i = 0; i < repeats; ++i) {
         DynamicTable table;
-        DT_load(TableSize-1, table);
+        DT_load(TableSize, table);
         timer.start();
         (table.*operation)(element, index);
         timer.stop();
@@ -76,7 +77,7 @@ void DT_measure_time_int(const int TableSize, int (T::*operation)() const, const
 
     for (int i = 0; i < repeats; ++i) {
         DynamicTable table;
-        DT_load(TableSize-1, table);
+        DT_load(TableSize, table);
         timer.start();
         (table.*operation)();
         timer.stop();
