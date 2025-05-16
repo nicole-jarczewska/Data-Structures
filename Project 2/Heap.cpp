@@ -58,12 +58,11 @@ void Heap::add(int value, int priority) {
 }
 
 void Heap::load(int desired_size) {
-    if (size == capacity) 
-        expand();
-
-    for (int i = 0; i < desired_size; ++i)
-    array[size++] = Element(rand() % 100001, rand() % 101);
-
+    for (int i = 0; i < desired_size; ++i){
+        if (size == capacity) expand();
+        array[size++] = Element(rand() % 100001, rand() % 101);
+    }
+    
     for (int i = size/ 2 - 1; i >= 0; i--)
         heapifyDown(i);
 
@@ -90,23 +89,24 @@ int Heap::getSize() const {
 }
 
 void Heap::modifyPriority(int value, int newPriority) {
-    int old_index = -1;
-    while(old_index < size) {
-        old_index++;
-        if(array[old_index].value == value) {
-            array[old_index].priority = newPriority;
+    int index = -1;
+    
+    for (int i = 0; i < size; ++i) {
+        if (array[i].value == value) {
+            index = i;
             break;
         }
     }
-    if (old_index == -1) return;
 
-    int oldPriority = array[old_index].priority;
-    array[old_index].priority = newPriority;
+    if (index == -1) return;
+
+    int oldPriority = array[index].priority;
+    array[index].priority = newPriority;
 
     if (newPriority > oldPriority) {
-        heapifyUp(old_index);
+        heapifyUp(index);
     } else {
-        heapifyDown(old_index);
+        heapifyDown(index);
     }
 }
 

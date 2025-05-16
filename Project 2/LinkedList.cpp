@@ -48,7 +48,8 @@ void insert(int x, int priority) {
 // }
 
 void delete_p() {
-    if(first == nullptr) return;
+    if (first == nullptr) return;
+
     Node* temp = first;
     first = first->next;
     delete temp;
@@ -82,10 +83,10 @@ void display(){
 }
 
 int peek() {
-    if(first == nullptr) {
-        std::cout << "Queue is empty.\n";
-        return -1;
-    }
+    // if(first == nullptr) {
+    //     std::cout << "Queue is empty.\n";
+    //     return -1;
+    // }
     return first->data;
 }
 

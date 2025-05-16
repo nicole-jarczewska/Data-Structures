@@ -18,7 +18,6 @@
 #include "include/Heap.hpp"
 #include "Heap.cpp"
 
-
 #include "include/TimeTest.hpp"
 #include "TimeTest.cpp"
 
@@ -36,6 +35,20 @@ void testDynamicTable(int size) {
 	measure_time<DynamicTable, int>(size, &DynamicTable::modifyPriority, randomNumber, randomPriority, "results/DT_modify" + filename.str());
 }
 
+void testHeap(int size) {
+    std::ostringstream filename;
+    filename << size << ".csv";
+
+    int randomNumber = rand() % 10001;
+    int randomPriority = rand() % 101;
+
+    measure_time<Heap, int>(size, &Heap::add, randomNumber, randomPriority, "results/heap_add" + filename.str());
+    measure_time<Heap, int>(size, &Heap::remove, randomNumber, 0, "results/heap_delete" + filename.str());
+    measure_time_int<Heap>(size, &Heap::getSize, "results/heap_size" + filename.str());
+    measure_time_int<Heap>(size, &Heap::peek, "results/heap_peek" + filename.str());
+	measure_time<Heap, int>(size, &Heap::modifyPriority, randomNumber, randomPriority, "results/heap_modify" + filename.str());
+}
+
 void testLinkedList(int size) {
     LL_measure_time(size);
 }
@@ -46,7 +59,8 @@ int main() {
 
     for(int size : TableSizes){
         // testDynamicTable(size);
-		// testLinkedList(size);
+        // testHeap(size);
+		testLinkedList(size);
     }
 
     // int data[]      = { 10, 20, 30, 40, 50 };
@@ -77,22 +91,20 @@ int main() {
     // table.modifyPriority(3, 1); 
     // table.print();
 
-    Heap heap;
-    heap.load(10); // Load the heap with 10 random elements
-    heap.print(); // Print the heap
+    // Heap heap;
+    // heap.load(10); // Load the heap with 10 random elements
+    // heap.print(); // Print the heap
 
-    heap.add(15, 5); // Add a new element with value 15 and priority 5
-    heap.print(); // Print the heap after adding the new element
+    // heap.add(15, 5); // Add a new element with value 15 and priority 5
+    // heap.print(); // Print the heap after adding the new element
 
-    heap.remove(15, 5); // Remove the element with value 15 and priority 5
-    heap.print(); // Print the heap after removing the element
+    // heap.remove(15, 5); // Remove the element with value 15 and priority 5
+    // heap.print(); // Print the heap after removing the element
 
-    heap.modifyPriority(15, 1); // Modify the priority of the element with value 10 to 1
-    heap.print(); // Print the heap after modifying the priority
-    std::cout << "Heap size: " << heap.getSize() << std::endl; // Print the size of the heap
-    std::cout << "Heap top element: " << heap.peek() << std::endl; // Print the top element of the heap
-    
-
+    // heap.modifyPriority(15, 1); // Modify the priority of the element with value 10 to 1
+    // heap.print(); // Print the heap after modifying the priority
+    // std::cout << "Heap size: " << heap.getSize() << std::endl; // Print the size of the heap
+    // std::cout << "Heap top element: " << heap.peek() << std::endl; // Print the top element of the heap
 
     return 0;
 }

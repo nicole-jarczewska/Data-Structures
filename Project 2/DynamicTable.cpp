@@ -48,11 +48,10 @@ void DynamicTable::add(int value, int priority) {
 }
 
 void DynamicTable::load(int desired_size) {
-    if (size == capacity) 
-        expand();
-
-    for (int i = 0; i < desired_size; ++i)
-    array[size++] = Element(rand() % 100001, rand() % 101);
+    for (int i = 0; i < desired_size; i++){
+        if (size == capacity) expand();
+        array[size++] = Element(rand() % 100001, rand() % 101);
+    }
 
     reorder();
     return;
