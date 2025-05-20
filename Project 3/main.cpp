@@ -8,8 +8,6 @@
 #include <fstream>
 #include <algorithm>
 #include <thread>
-#include <functional>
-#include <cmath>
 
 #include "include/HashTable.hpp"
 #include "HashTable.cpp"
@@ -20,10 +18,9 @@
 #include "TimeTest.cpp"
 
 void test(int size, int scenario) {
-    std::string s;
-    if(scenario == 0) {
-        s = "average";
-    } else if(scenario == 1) {
+    std::string s = "average";
+
+    if(scenario == 1) {
          s = "optymisctic";
     } else if(scenario == -1) {
          s = "pesymistic";
@@ -32,14 +29,14 @@ void test(int size, int scenario) {
     std::ostringstream filename;
     filename << size << s << ".csv";
 
-    measure_time<HashTable, int>(hashMod, size, &HashTable::insert, rand() % 10001, "results/MOD_insert" + filename.str());
-    measure_time<HashTable, int>(hashMod, size, &HashTable::remove, rand() % 10001, "results/MOD_remove" + filename.str());
+    measure_time<HashTable, int>(hashMod, size, scenario, &HashTable::insert, rand() % 10001, "results/MOD_insert" + filename.str());
+    measure_time<HashTable, int>(hashMod, size, scenario, &HashTable::remove, rand() % 10001, "results/MOD_remove" + filename.str());
 }
 
 int main() {
     srand(static_cast<unsigned int>(time(0)));
     const int TableSizes[] = {10};
-    const int Scenerios[] = {0}; //-1, 0, 1 
+    const int Scenerios[] = {-1, 1}; //-1, 0, 1 
 
     for(int size : TableSizes){
         for(int scenario : Scenerios){

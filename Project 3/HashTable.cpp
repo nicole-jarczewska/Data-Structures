@@ -31,9 +31,12 @@ bool HashTable::remove(int key) {
     }
 }
 
-void HashTable::load(int size) {
-    for (int i = 0; i < size; ++i) {
+void HashTable::load(int size, int scenario) {
+    clear();
+    for (int i = 0; i < size/2; ++i) {
         int key = rand() % 10001;
+        if(scenario == 1) key = i;
+        else if(scenario == -1) key = i*size;
         insert(key);
     }
 }

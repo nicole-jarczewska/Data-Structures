@@ -7,7 +7,7 @@ public:
 
     bool insert(int key);
     bool remove(int key);
-    void load(int size);
+    void load(int size, int scenario);
 
     std::vector<int> table;
     std::vector<bool> used;

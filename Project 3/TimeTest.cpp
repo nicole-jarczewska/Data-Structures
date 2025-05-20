@@ -40,14 +40,14 @@ class TimingsCollector {
     };
 
 template <typename T, typename Arg>
-void measure_time(int(*HashFunction)(int, int), const int size, bool (T::*operation)(Arg), Arg key, const std::filesystem::path& output_csv) {
+void measure_time(int(*HashFunction)(int, int), const int size, const int scenario, bool (T::*operation)(Arg), Arg key, const std::filesystem::path& output_csv) {
     Timer timer;
     TimingsCollector timingsCollector;
     const int repeats = 100;
 
     for (int i = 0; i < repeats; ++i) {
         T HashTable(size, HashFunction);
-        HashTable.load(size);
+        HashTable.load(size, scenario);
         timer.start();
         (HashTable.*operation)(key);
         timer.stop();
