@@ -7,10 +7,10 @@ public:
 
     bool insert(int key);
     bool remove(int key);
-    void load(int size, int scenario);
+    void load(int size, int loadfactor, int scenario);
 
-    std::vector<int> table;
-    std::vector<bool> used;
+    int *table;
+    bool *used;
     int size;
     int (*hashFunction)(int, int);
     
