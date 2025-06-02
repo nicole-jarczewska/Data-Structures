@@ -2,29 +2,28 @@
 
 HashTable::HashTable(int s, int (*h)(int, int)) : size(s), hashFunction(h) {
     table = new int[size];
-    used = new bool[size];
+    status = new CellStatus[size];
     clear();
 }
 
 HashTable::~HashTable() {
     delete[] table;
-    delete[] used;
+    delete[] status;
 }
 
 bool HashTable::insert(int key) {
     int index = hashFunction(key, size);
+    for (int i = 0; i < size; ++i) {
 
-    for (int i = 0; i < size; ++i){
-
-        if (used[index] && table[index] == key)
-            return false;
-
-        if (!used[index]){
+        if (status[index] == EMPTY || status[index] == DELETED) {
             table[index] = key;
-            used[index] = true;
+            status[index] = FILLED;
             return true;
         }
 
+        if (status[index] == FILLED && table[index] == key) {
+            return false;
+        }
         index = (index + 1) % size;
     }
     return false;
@@ -32,23 +31,25 @@ bool HashTable::insert(int key) {
 
 bool HashTable::remove(int key) {
     int index = hashFunction(key, size);
-
     for (int i = 0; i < size; ++i) {
-        if (used[index] && table[index] == key) {
-            used[index] = false;
+        if (status[index] == FILLED && table[index] == key) {
+            status[index] = DELETED;
             table[index] = -1;
             return true;
         }
+
+        if (status[index] == EMPTY) {
+            return false;
+        }
         index = (index + 1) % size;
     }
-
-    return false; // element not found
+    return false;
 }
 
 
 void HashTable::load(int size, int loadfactor, int scenario) {
     clear();
-    float lf = size * (loadfactor/100.0);
+    int lf = static_cast<int>(size * (loadfactor / 100.0));
     for (int i = 0; i < lf; ++i) {
         // int key = rand() % 10001;
         // if(scenario == 1) 
@@ -61,6 +62,13 @@ void HashTable::load(int size, int loadfactor, int scenario) {
 void HashTable::clear() {
     for (int i = 0; i < size; ++i) {
         table[i] = -1;
-        used[i] = false;
+        status[i] = EMPTY;
     }
+}
+
+int HashTable::count_filled() const {
+    int count = 0;
+    for (int i = 0; i < size; ++i)
+        if (status[i] == FILLED) ++count;
+    return count;
 }

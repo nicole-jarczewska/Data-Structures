@@ -37,16 +37,27 @@ int countDigits(long long n) {
 }
 
 int square(int key, int size) {
-    long long squared = key * key;
+    __int128 squared = (__int128)key * key;
 
-    int totalDigits = countDigits(squared);
+    // Count digits of squared number
+    long long temp = squared;
+    int totalDigits = 0;
+    while (temp > 0) {
+        totalDigits++;
+        temp /= 10;
+    }
+
     int extractDigits = 3;
     int shift = (totalDigits - extractDigits) / 2;
     if (shift < 0) shift = 0;
 
-    long long divisor = 1;
+    // Shift divisor
+    __int128 divisor = 1;
     for (int i = 0; i < shift; ++i) divisor *= 10;
 
-    long long reduced = (squared / divisor) % static_cast<long long>(pow(10, extractDigits));
+    __int128 mod10 = 1;
+    for (int i = 0; i < extractDigits; ++i) mod10 *= 10;
+
+    __int128 reduced = (squared / divisor) % mod10;
     return static_cast<int>(reduced % size);
 }

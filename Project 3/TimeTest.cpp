@@ -58,3 +58,26 @@ void measure_time(int(*HashFunction)(int, int), const int size, const int loadfa
         std::cerr << "Error saving timings to " << output_csv << std::endl;
     }
 };
+
+void histograms(int(*HashFunction)(int, int), int size, int fill, const std::string& output_filename) {
+    std::vector<int> distribution(size, 0);
+
+    for (int i = 0; i < fill; ++i) {
+        int key = rand(); 
+        int bin = HashFunction(key, size);
+        distribution[bin]++;
+    }
+
+    std::ofstream file(output_filename);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file: " << output_filename << std::endl;
+        return;
+    }
+
+    file << "bin_index,count\n";
+    for (int i = 0; i < size; ++i) {
+        file << i << "," << distribution[i] << "\n";
+    }
+
+    file.close();
+}
