@@ -40,7 +40,7 @@ def loading_factor(results, operation, lf):
         plt.plot(SIZES, results[func][operation][lf], label=label, marker='o', color=color)
 
     title = {"insert": "dodawania elementu", "remove": "usunięcia elementu"}[operation]
-    plt.title(f"Porównanie operacji {title} dla LF = {lf}%")
+    plt.title(f"Porównanie operacji {title} dla Load factor = {lf}%")
     plt.xlabel("Rozmiar zbioru")
     plt.ylabel("Średni czas wykonania [ns]")
     plt.grid(True, which="both", linestyle="--", linewidth=0.5)
@@ -59,7 +59,7 @@ def all(results, func, operation):
     title = {"insert": "dodawania elementu", "remove": "usunięcia elementu"}[operation]
     func_labels = {"MOD": "Funkcja oparta na operacji modulo", "FIB": "Haszowanie fibonacciego", "BIT": "Bit mix"}
 
-    plt.title(f"{func_labels[func]} - operacja {title} dla różnych LF")
+    plt.title(f"{func_labels[func]} - operacja {title} dla różnych Load factor")
     plt.xlabel("Rozmiar zbioru")
     plt.ylabel("Średni czas wykonania [ns]")
     plt.grid(True, linestyle="--", linewidth=0.5)
